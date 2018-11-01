@@ -11,14 +11,24 @@ enum PloggerLevel
 
 class Plogger {
    private:
-      FILE        *fPtr;
       PloggerLevel logLevel;
+      FILE *fPtr;
+      char  buffer[4096];
+      char  tagBuf[128];
+
+      char *logTag(PloggerLevel level);
+      bool  hdrOneShot;
+      bool  echoFlag;
 
    public:
-      int          log(PloggerLevel, const char *format, ...);
-      void         setLevel(PloggerLevel inLevel){this->logLevel = inLevel;};
+      int   log(PloggerLevel, const char *format, ...);
+      void  setLevel(PloggerLevel inLevel);
+      bool  open(const char *name);
+      void  setEcho(bool on){echoFlag = on;};
+      bool  getEcho(void){return echoFlag;};
 
       Plogger(void);
+     ~Plogger(void);
       PloggerLevel getLevel(void){return this->logLevel;};
 };
 
